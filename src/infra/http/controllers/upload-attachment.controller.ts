@@ -11,7 +11,9 @@ import {
   UseInterceptors,
 } from '@nestjs/common'
 import { FileInterceptor } from '@nestjs/platform-express'
+import { ApiOperation, ApiResponse, ApiTags, ApiConsumes, ApiBody } from '@nestjs/swagger'
 
+@ApiTags('Anexos')
 @Controller('/attachments')
 export class UploadAttachmentController {
   constructor(
@@ -20,6 +22,38 @@ export class UploadAttachmentController {
 
   @Post()
   @UseInterceptors(FileInterceptor('file'))
+  @ApiOperation({ summary: 'Fazer upload de um anexo' })
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+          description: 'Arquivo a ser enviado (PNG, JPG, JPEG ou PDF, máximo 2MB)',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 201,
+    description: 'Anexo enviado com sucesso',
+    schema: {
+      type: 'object',
+      properties: {
+        attachmentId: {
+          type: 'string',
+          format: 'uuid',
+          example: '123e4567-e89b-12d3-a456-426614174000',
+        },
+      },
+    },
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Tipo de arquivo inválido ou tamanho excede 2MB',
+  })
   async handle(
     @UploadedFile(
       new ParseFilePipe({

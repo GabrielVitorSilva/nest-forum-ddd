@@ -1,13 +1,14 @@
 @baseUrl = http://localhost:3333
 @authToken = {{authenticate.response.body.access_token}}
 
+# Autenticação
 # @name create_account
 POST {{baseUrl}}/accounts
 Content-Type: application/json
 
 {
-  "name": "Diego Fernandes",
-  "email": "diego@rocketseat.com.br",
+  "name": "Gabriel Vitor",
+  "email": "gabriel@email.com.br",
   "password": "123456"
 }
 
@@ -18,12 +19,13 @@ POST {{baseUrl}}/sessions
 Content-Type: application/json
 
 {
-  "email": "diego@rocketseat.com.br",
+  "email": "gabriel@email.com.br",
   "password": "123456"
 }
 
 ###
 
+# Perguntas
 # @name create_question
 POST {{baseUrl}}/questions
 Content-Type: application/json
@@ -31,12 +33,131 @@ Authorization: Bearer {{authToken}}
 
 {
   "title": "Nova pergunta 2",
-  "content": "Teste"
+  "content": "Teste",
+  "attachments": []
 }
 
 ###
 
 # @name fetch_recent_questions
 GET {{baseUrl}}/questions?page=1
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name get_question_by_slug
+GET {{baseUrl}}/questions/nova-pergunta-2
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name edit_question
+PUT {{baseUrl}}/questions/a458cf34-826b-49ae-9343-8a60bff0f032
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "title": "Pergunta editada",
+  "content": "Conteúdo editado",
+  "attachments": []
+}
+
+###
+
+# @name delete_question
+DELETE {{baseUrl}}/questions/a458cf34-826b-49ae-9343-8a60bff0f032
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# Respostas
+# @name answer_question
+POST {{baseUrl}}/questions/123/answers
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "content": "Nova resposta",
+  "attachments": []
+}
+
+###
+
+# @name edit_answer
+PUT {{baseUrl}}/answers/123
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "content": "Resposta editada",
+  "attachments": []
+}
+
+###
+
+# @name delete_answer
+DELETE {{baseUrl}}/answers/123
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name fetch_question_answers
+GET {{baseUrl}}/questions/123/answers?page=1
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name choose_best_answer
+PATCH {{baseUrl}}/answers/123/choose-as-best
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# Comentários
+# @name comment_on_question
+POST {{baseUrl}}/questions/123/comments
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "content": "Novo comentário na pergunta"
+}
+
+###
+
+# @name comment_on_answer
+POST {{baseUrl}}/answers/123/comments
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "content": "Novo comentário na resposta"
+}
+
+###
+
+# @name delete_question_comment
+DELETE {{baseUrl}}/questions/comments/123
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name delete_answer_comment
+DELETE {{baseUrl}}/answers/comments/123
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# Notificações
+# @name read_notification
+PATCH {{baseUrl}}/notifications/123/read
 Content-Type: application/json
 Authorization: Bearer {{authToken}}
